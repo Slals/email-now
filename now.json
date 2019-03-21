@@ -7,7 +7,7 @@
     "alias": "blocs.email",
     "env": {
         "SMTP_HOST": "ssl0.ovh.net",
-        "SMTP_PORT": 995,
+        "SMTP_PORT": "995",
         "SMTP_PASSWD": "@smtp-secret"
     },
     "routes": [
