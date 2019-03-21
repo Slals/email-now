@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/smtp"
 	"os"
@@ -23,15 +24,16 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 
 	smtpHost := os.Getenv("SMTP_HOST")
 
-	smtp.PlainAuth("", os.Getenv("SMTP_LOGIN"), os.Getenv("SMTP_PASSWD"), smtpHost)
+	emailAuth := smtp.PlainAuth("", os.Getenv("SMTP_LOGIN"), os.Getenv("SMTP_PASSWD"), smtpHost)
 
-	// to := []string{os.Getenv("EMAIL")}
-	// msg := []byte(fmt.Sprintf("%s sent\r\n\r\n%s", mess.EmailAddress, mess.Message))
+	to := []string{os.Getenv("EMAIL")}
+	msg := []byte(fmt.Sprintf("%s sent\r\n\r\n%s", mess.EmailAddress, mess.Message))
 
-	// if err := smtp.SendMail(smtpHost+os.Getenv("SMTP_PORT"), emailAuth, mess.EmailAddress, to, msg); err != nil {
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	return
-	// }
+	if err := smtp.SendMail(smtpHost+os.Getenv("SMTP_PORT"), emailAuth, mess.EmailAddress, to, msg); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Send failed"))
+		return
+	}
 
 	w.WriteHeader(http.StatusNoContent)
 	w.Write([]byte("success"))
