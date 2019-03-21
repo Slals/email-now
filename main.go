@@ -32,7 +32,7 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 	m.SetHeader("From", mess.EmailAddress)
 	m.SetHeader("To", os.Getenv("EMAIL"))
 	m.SetHeader("Subject", "New message")
-	m.SetHeader("text/plain", mess.Message)
+	m.SetBody("text/plain", mess.Message)
 
 	port, _ := strconv.ParseInt(os.Getenv("SMTP_PORT"), 10, 32)
 	d := gomail.NewDialer(os.Getenv("SMTP_HOST"), int(port), os.Getenv("SMTP_LOGIN"), os.Getenv("SMTP_PASSWD"))
