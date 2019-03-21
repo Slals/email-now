@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"net/smtp"
+	"os"
 )
 
 type Message struct {
@@ -19,10 +21,10 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// smtpHost := os.Getenv("SMTP_HOST")
-	//
-	// emailAuth := smtp.PlainAuth("", os.Getenv("SMTP_LOGIN"), os.Getenv("SMTP_PASSWD"), smtpHost)
-	//
+	smtpHost := os.Getenv("SMTP_HOST")
+
+	smtp.PlainAuth("", os.Getenv("SMTP_LOGIN"), os.Getenv("SMTP_PASSWD"), smtpHost)
+
 	// to := []string{os.Getenv("EMAIL")}
 	// msg := []byte(fmt.Sprintf("%s sent\r\n\r\n%s", mess.EmailAddress, mess.Message))
 
