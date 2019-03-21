@@ -3,5 +3,22 @@
     "name": "email-now",
     "builds": [
         {"src": "*.go", "use": "@now/go"}
+    ],
+    "alias": "blocs.email",
+    "env": {
+        "SMTP_HOST": "ssl0.ovh.net",
+        "SMTP_PORT": 995,
+        "SMTP_PASSWD": "@smtp-secret"
+    },
+    "routes": [
+      {
+        "src": "/",
+        "dest": "/main.go",
+        "headers": {
+          "Access-Control-Allow-Origin": "@cors",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+        }
+      }
     ]
 }
