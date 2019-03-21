@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
-	"strconv"
 
 	gomail "gopkg.in/gomail.v2"
 )
@@ -29,15 +28,15 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 	m.SetHeader("Subject", "New message")
 	m.SetHeader("text/plain", mess.Message)
 
-	port, _ := strconv.ParseInt(os.Getenv("SMTP_PORT"), 10, 32)
-	d := gomail.NewDialer(os.Getenv("SMTP_HOST"), int(port), os.Getenv("SMTP_LOGIN"), os.Getenv("SMTP_PASSWD"))
+	// port, _ := strconv.ParseInt(os.Getenv("SMTP_PORT"), 10, 32)
+	// d := gomail.NewDialer(os.Getenv("SMTP_HOST"), int(port), os.Getenv("SMTP_LOGIN"), os.Getenv("SMTP_PASSWD"))
 
-	if err := d.DialAndSend(m); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Send failed"))
-		return
-	}
+	// if err := d.DialAndSend(m); err != nil {
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	w.Write([]byte("Send failed"))
+	// 	return
+	// }
 
 	w.WriteHeader(http.StatusNoContent)
-	w.Write([]byte("success"))
+	w.Write([]byte("success" + os.Getenv("SMTP_HOST") + os.Getenv("SMTP_PORT") + os.Getenv("SMTP_LOGIN")[0:10] + os.Getenv("SMTP_PASSWD")[0:5]))
 }
