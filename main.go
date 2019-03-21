@@ -39,5 +39,5 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("success" + os.Getenv("SMTP_HOST") + os.Getenv("SMTP_PORT") + os.Getenv("SMTP_LOGIN")[0:10] + os.Getenv("SMTP_PASSWD")[0:5]))
+	w.Write([]byte("success"))
 }
