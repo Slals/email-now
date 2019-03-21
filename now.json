@@ -17,7 +17,7 @@
         "src": "/",
         "dest": "/main.go",
         "headers": {
-          "Access-Control-Allow-Origin": "https://blocs.fr",
+          "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "POST, OPTIONS",
           "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
         }
