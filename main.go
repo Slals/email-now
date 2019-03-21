@@ -2,10 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"net/smtp"
 	"os"
+	"strconv"
+
+	gomail "gopkg.in/gomail.v2"
 )
 
 type Message struct {
@@ -22,14 +23,16 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	smtpHost := os.Getenv("SMTP_HOST")
+	m := gomail.NewMessage()
+	m.SetHeader("From", mess.EmailAddress)
+	m.SetHeader("To", os.Getenv("EMAIL"))
+	m.SetHeader("Subject", "New message")
+	m.SetHeader("text/plain", mess.Message)
 
-	emailAuth := smtp.PlainAuth("", os.Getenv("SMTP_LOGIN"), os.Getenv("SMTP_PASSWD"), smtpHost)
+	port, _ := strconv.ParseInt(os.Getenv("SMTP_PORT"), 10, 32)
+	d := gomail.NewDialer(os.Getenv("SMTP_HOST"), int(port), os.Getenv("SMTP_LOGIN"), os.Getenv("SMTP_PASSWD"))
 
-	to := []string{os.Getenv("EMAIL")}
-	msg := []byte(fmt.Sprintf("%s sent\r\n\r\n%s", mess.EmailAddress, mess.Message))
-
-	if err := smtp.SendMail(smtpHost+os.Getenv("SMTP_PORT"), emailAuth, mess.EmailAddress, to, msg); err != nil {
+	if err := d.DialAndSend(m); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Send failed"))
 		return
