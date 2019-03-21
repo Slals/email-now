@@ -23,6 +23,12 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Cors protection workaround
+	if r.Host != os.Getenv("HOST") {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	m := gomail.NewMessage()
 	m.SetHeader("From", mess.EmailAddress)
 	m.SetHeader("To", os.Getenv("EMAIL"))
