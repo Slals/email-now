@@ -10,7 +10,7 @@
         "SMTP_PORT": ":465",
         "SMTP_PASSWD": "@smtp-secret",
         "SMTP_LOGIN": "@smtp-login",
-        "EMAIL": "@smtp-email"
+        "EMAIL": "@email"
     },
     "routes": [
       {
