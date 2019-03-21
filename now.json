@@ -2,6 +2,6 @@
     "version": 2,
     "name": "email-now",
     "builds": [
-        {"src": "main.go", "use": "@now/go"}
+        {"src": "*.go", "use": "@now/go"}
     ]
 }
