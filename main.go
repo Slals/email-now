@@ -15,6 +15,11 @@ type Message struct {
 }
 
 func HandleEmail(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	var mess Message
 	decoder := json.NewDecoder(r.Body)
 
