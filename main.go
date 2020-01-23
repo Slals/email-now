@@ -6,12 +6,14 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/haisum/recaptcha"
 	gomail "gopkg.in/gomail.v2"
 )
 
 type Message struct {
 	EmailAddress string `json:"email"`
 	Message      string `json:"message"`
+	GreToken     string `json:"greToken"`
 }
 
 func HandleEmail(w http.ResponseWriter, r *http.Request) {
@@ -20,11 +22,22 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	re := recaptcha.R{
+		Secret: os.Getenv("RE_SECRET"),
+	}
+
 	var mess Message
 	decoder := json.NewDecoder(r.Body)
 
 	if err := decoder.Decode(&mess); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid message"))
+		return
+	}
+
+	if !re.VerifyResponse(mess.GreToken) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid Re-Captcha"))
 		return
 	}
 
@@ -39,10 +52,10 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 
 	if err := d.DialAndSend(m); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Send failed"))
+		w.Write([]byte("Failed to send"))
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("success"))
+	w.Write([]byte("Successfuly sent"))
 }
