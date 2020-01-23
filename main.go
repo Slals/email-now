@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -37,7 +38,7 @@ func HandleEmail(w http.ResponseWriter, r *http.Request) {
 
 	if !re.VerifyResponse(mess.GreToken) {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid Re-Captcha"))
+		w.Write([]byte(fmt.Sprintf("%s Invalid Re-Captcha", mess.GreToken)))
 		return
 	}
 
